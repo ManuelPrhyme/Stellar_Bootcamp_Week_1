@@ -64,7 +64,7 @@ fn main() {
 
     std::io::stdout().write_all(Print_List.as_bytes()).expect("Failed to write to console");
 
-    println!("Type 'D' to delete an entry or 'E' to edit an entry or 'F' to accept the list");
+    println!("\nType 'D' to delete an entry or 'E' to edit an entry or 'F' to accept the list");
     let mut choice = String::new();
     stdin().read_line(&mut choice).expect("Failed to read input");
 
@@ -92,7 +92,7 @@ fn main() {
             stdin().read_line(&mut entry_name).expect("Failed to read input");
             println!("Enter new value: ");
             stdin().read_line(&mut new_value).expect("Failed to read input");
-            if let Some(value) = Bills.get(entry_name.trim()){
+            if let Some(value) = Bills.get_mut(entry_name.trim()){
                 *value = new_value.trim().parse::<u64>().expect("conversion failed");
             }
             
