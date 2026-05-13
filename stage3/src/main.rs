@@ -1,9 +1,10 @@
 use std::io::{stdin,Write,stdout};
+use std::collections::{HashMap, hash_map};
 
 fn main() {
-    println!("Stage 1");
+    println!("Stage 3");
 
-    let mut Bills: Vec<(String,u64)> = Vec::new();
+    let mut Bills: HashMap<String, u64> = HashMap::new();
     let mut bill_key: String = String::new();
     let mut bil_value: String = String::new();
     let mut no_of_bills: String = String::new();
@@ -29,7 +30,7 @@ fn main() {
 
             match bil_value_parsed {
                 Ok(value) => {
-                    Bills.push((bill_key_trimmed.clone(),value));
+                    Bills.insert(bill_key_trimmed.clone(),value);
                     break;
                 },
                 Err(_) => {
@@ -38,7 +39,7 @@ fn main() {
 
                     let amount_parsed = bil_value.trim().parse::<u64>().expect("Not a number");
 
-                    Bills.push((bill_key_trimmed.clone(), amount_parsed));
+                    Bills.insert(bill_key_trimmed.clone(), amount_parsed);
 
 
                 }
@@ -52,14 +53,67 @@ fn main() {
 
     println!("\nList of Bills");
 
-      let mut Print_List = String::new();
+    let Bills_Adapted = Bills.iter().map(|(key,value)|(key.clone(),*value)).collect::<Vec<(String,u64)>>();
 
-    for _bill in Bills.iter() {
+    let mut Print_List = String::new();
+
+    for _bill in Bills_Adapted.iter() {
 
         Print_List.push_str(&format!("Exp: {:?} | Amount:{}",_bill.0.trim(),_bill.1));
     }
 
     std::io::stdout().write_all(Print_List.as_bytes()).expect("Failed to write to console");
+
+    println!("Type 'D' to delete an entry or 'E' to edit an entry or 'F' to accept the list");
+    let mut choice = String::new();
+    stdin().read_line(&mut choice).expect("Failed to read input");
+
+    match choice.trim() {
+        "D" | "d" => {
+            println!("Enter entry name: ");
+            let mut entry_name = String::new();
+            stdin().read_line(&mut entry_name).expect("Failed to read input");
+            Bills.remove(entry_name.trim());
+            
+            let Bills_Adapt = Bills.iter().map(|(key,value)|(key.clone(),*value)).collect::<Vec<(String,u64)>>();
+            
+            for _bill in Bills_Adapt.iter() {
+            Print_List.push_str(&format!("Exp: {:?} | Amount:{}",_bill.0.trim(),_bill.1));
+            }
+
+            std::io::stdout().write_all(Print_List.as_bytes()).expect("Failed to write to console");
+        },
+
+        "E" | "e" => {
+
+            println!("Enter entry name: ");
+            let mut entry_name = String::new();
+            let mut new_value = String::new();
+            stdin().read_line(&mut entry_name).expect("Failed to read input");
+            println!("Enter new value: ");
+            stdin().read_line(&mut new_value).expect("Failed to read input");
+            if let Some(value) = Bills.get(entry_name.trim()){
+                *value = new_value.trim().parse::<u64>().expect("conversion failed");
+            };
+            
+            let Bills_Adapt = Bills.iter().map(|(key,value)|(key.clone(),*value)).collect::<Vec<(String,u64)>>();
+            
+            for _bill in Bills_Adapt.iter() {
+            Print_List.push_str(&format!("Exp: {:?} | Amount:{}",_bill.0.trim(),_bill.1));
+            }
+
+            std::io::stdout().write_all(Print_List.as_bytes()).expect("Failed to write to console");
+
+        }
+
+        "F" | "f" => {
+            println!("Accepted");
+        },
+
+        _ => {
+            println!("Invalid Input");
+        }
+    }
 
 }
 
