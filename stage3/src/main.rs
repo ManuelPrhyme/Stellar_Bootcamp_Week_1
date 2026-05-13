@@ -94,7 +94,7 @@ fn main() {
             stdin().read_line(&mut new_value).expect("Failed to read input");
             if let Some(value) = Bills.get(entry_name.trim()){
                 *value = new_value.trim().parse::<u64>().expect("conversion failed");
-            };
+            }
             
             let Bills_Adapt = Bills.iter().map(|(key,value)|(key.clone(),*value)).collect::<Vec<(String,u64)>>();
             
