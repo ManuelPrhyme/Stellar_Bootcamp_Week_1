@@ -75,9 +75,9 @@ fn main() {
             stdin().read_line(&mut entry_name).expect("Failed to read input");
             Bills.remove(entry_name.trim());
             
-            let Bills_Adapted = Bills.iter().map(|(key,value)|(key.clone(),*value)).collect::<Vec<(String,u64)>>();
+            let Bills_Adapt = Bills.iter().map(|(key,value)|(key.clone(),*value)).collect::<Vec<(String,u64)>>();
             
-            for _bill in Bills_Adapted.iter() {
+            for _bill in Bills_Adapt.iter() {
             Print_List.push_str(&format!("Exp: {:?} | Amount:{}",_bill.0.trim(),_bill.1));
             }
 
